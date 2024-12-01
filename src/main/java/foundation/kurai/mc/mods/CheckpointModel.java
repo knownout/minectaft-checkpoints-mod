@@ -1,8 +1,8 @@
-package foundation.kurai;
+package foundation.kurai.mc.mods;
 
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
-import foundation.kurai.util.MetadataUtil;
+import foundation.kurai.mc.mods.util.MetadataUtil;
 
 import java.io.File;
 import java.io.FileReader;

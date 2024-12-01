@@ -1,7 +1,8 @@
-package foundation.kurai.renderers;
+package foundation.kurai.mc.mods.renderers;
 import com.mojang.blaze3d.platform.NativeImage;
-import foundation.kurai.CheckpointsMod;
-import foundation.kurai.util.MetadataUtil;
+import foundation.kurai.mc.mods.CheckpointModel;
+import foundation.kurai.mc.mods.CheckpointsMod;
+import foundation.kurai.mc.mods.util.MetadataUtil;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.renderer.texture.DynamicTexture;
@@ -11,29 +12,38 @@ import org.jetbrains.annotations.NotNull;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.function.Consumer;
 
 public class CheckpointEntityRenderer {
     private static final ResourceLocation ARROW_ICON_LIT = new ResourceLocation(CheckpointsMod.MODID, "textures/gui/load_highlighted.png"); // Use Minecraft's built-in arrow texture
     private static final ResourceLocation ARROW_ICON = new ResourceLocation(CheckpointsMod.MODID, "textures/gui/load.png"); // Use Minecraft's built-in arrow texture
 
-    public final ResourceLocation screenshotTexture;
-    public NativeImage screenshotImage;
-    public final String name;
-    public final String createdAt;
-    public final String fileName;
+    private int screenshotWidth = 0;
+    private int screenshotHeight = 0;
 
-    public CheckpointEntityRenderer(File screenshotFile, String name, String createdAt, String fileName) {
-        this.name = name;
-        this.createdAt = createdAt;
-        this.fileName = fileName;
-        this.screenshotTexture = loadScreenshot(screenshotFile, nativeImage -> this.screenshotImage = nativeImage);
+    public final ResourceLocation screenshotTexture;
+    public final CheckpointModel model;
+
+    @FunctionalInterface
+    private interface ImageDimensionsConsumer {
+        void accept(int a, int b);
     }
 
-    private static ResourceLocation loadScreenshot(File screenshotFile, Consumer<NativeImage> callback) {
+    public CheckpointEntityRenderer(CheckpointModel model) {
+        this.model = model;
+        this.screenshotTexture = loadScreenshot(model.screenshotPath.toFile(), (width, height) -> {
+            this.screenshotWidth = width;
+            this.screenshotHeight = height;
+        });
+    }
+
+    private static ResourceLocation loadScreenshot(File screenshotFile, ImageDimensionsConsumer callback) {
         try {
             NativeImage image = NativeImage.read(screenshotFile.toURI().toURL().openStream());
-            callback.accept(image);
+
+            int screenshotWidth = image.getWidth();
+            int screenshotHeight = image.getHeight();
+
+            callback.accept(screenshotWidth, screenshotHeight);
             DynamicTexture texture = new DynamicTexture(image);
             return Minecraft.getInstance().getTextureManager().register("checkpoint_screenshot_" + screenshotFile.getName(), texture);
         } catch (IOException e) {
@@ -56,8 +66,8 @@ public class CheckpointEntityRenderer {
         // Render the image if available
         if (screenshotTexture != null) {
             // Get the original dimensions of the texture
-            int imageWidth = screenshotImage.getWidth(); // Replace with your actual image width
-            int imageHeight = screenshotImage.getHeight(); // Replace with your actual image height
+            int imageWidth = this.screenshotWidth; // Replace with your actual image width
+            int imageHeight = this.screenshotHeight; // Replace with your actual image height
 
             float widthScale = (float) targetWidth / imageWidth;
             float heightScale = (float) targetHeight / imageHeight;
@@ -78,9 +88,9 @@ public class CheckpointEntityRenderer {
 
         // Render the checkpoint details with padding
         int textX = x + targetWidth + 10;
-        graphics.drawString(Minecraft.getInstance().font, this.name, textX, y + 4, 0xFFFFFF, false);
-        graphics.drawString(Minecraft.getInstance().font, this.fileName + ", " + MetadataUtil.getReadableDatetimeString(this.createdAt), textX, y + 18, 0x888888, false);
-        graphics.drawString(Minecraft.getInstance().font, Component.translatable("screen.checkpoints_mod.version_label").getString() + ": " + MetadataUtil.getModVersion(), textX, y + 28, 0x888888, false);
+        graphics.drawString(Minecraft.getInstance().font, this.model.name, textX, y + 4, 0xFFFFFF, false);
+        graphics.drawString(Minecraft.getInstance().font, this.model.fileName + ", " + MetadataUtil.getReadableDatetimeString(this.model.createdAt), textX, y + 18, 0x888888, false);
+        graphics.drawString(Minecraft.getInstance().font, Component.translatable("screen.checkpoints.version_label").getString() + ": " + MetadataUtil.getModVersion(), textX, y + 28, 0x888888, false);
 
         if (isHovered) {
             int arrowSize = 24;

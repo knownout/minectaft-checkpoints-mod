@@ -1,4 +1,4 @@
-package foundation.kurai.util;
+package foundation.kurai.mc.mods.util;
 
 import net.minecraft.client.Minecraft;
 

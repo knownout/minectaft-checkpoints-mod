@@ -1,6 +1,6 @@
-package foundation.kurai.util;
+package foundation.kurai.mc.mods.util;
 
-import foundation.kurai.CheckpointsMod;
+import foundation.kurai.mc.mods.CheckpointsMod;
 import net.minecraft.client.Minecraft;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.registries.Registries;

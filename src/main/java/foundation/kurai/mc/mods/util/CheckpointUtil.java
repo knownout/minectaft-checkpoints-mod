@@ -1,12 +1,11 @@
-package foundation.kurai.util;
+package foundation.kurai.mc.mods.util;
 
 import com.google.gson.JsonObject;
-import com.mojang.realmsclient.RealmsMainScreen;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.screens.ErrorScreen;
 import net.minecraft.client.gui.screens.GenericDirtMessageScreen;
+import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.client.gui.screens.TitleScreen;
-import net.minecraft.client.gui.screens.multiplayer.JoinMultiplayerScreen;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.level.ServerLevel;
@@ -20,6 +19,8 @@ import java.time.format.DateTimeFormatter;
 import java.util.concurrent.CompletableFuture;
 
 public class CheckpointUtil {
+    public static final Screen SAVING_LEVEL_SCREEN = new GenericDirtMessageScreen(Component.translatable("menu.savingLevel"));
+
     public static void saveCurrentWorld() {
         Minecraft minecraft = Minecraft.getInstance();
 
@@ -64,7 +65,7 @@ public class CheckpointUtil {
             return;
         }
 
-        minecraft.setScreen(new GenericDirtMessageScreen(Component.translatable("menu.savingLevel")));
+        minecraft.setScreen(SAVING_LEVEL_SCREEN);
 
         File metadataFile = new File(checkpointDir, "checkpoint.json");
 
@@ -117,25 +118,14 @@ public class CheckpointUtil {
     private static void onDisconnect() {
         Minecraft minecraft = Minecraft.getInstance();
 
-        boolean flag = minecraft.isLocalServer();
-        boolean flag1 = minecraft.isConnectedToRealms();
+        if (!minecraft.isLocalServer()) return;
+
         assert minecraft.level != null;
         minecraft.level.disconnect();
-        if (flag) {
-            minecraft.clearLevel(new GenericDirtMessageScreen(Component.translatable("menu.savingLevel")));
-        } else {
-            minecraft.clearLevel();
-        }
+        minecraft.clearLevel(SAVING_LEVEL_SCREEN);
 
         TitleScreen titlescreen = new TitleScreen();
-        if (flag) {
-            minecraft.setScreen(titlescreen);
-        } else if (flag1) {
-            minecraft.setScreen(new RealmsMainScreen(titlescreen));
-        } else {
-            minecraft.setScreen(new JoinMultiplayerScreen(titlescreen));
-        }
-
+        minecraft.setScreen(titlescreen);
     }
 
     public static void loadCheckpoint(String checkpointFileName) {
@@ -162,19 +152,19 @@ public class CheckpointUtil {
 
         // Exit the world safely
         minecraft.execute(() -> {
-            minecraft.getReportingContext().draftReportHandled(minecraft, null, CheckpointUtil::onDisconnect, true);
+            minecraft.getReportingContext().draftReportHandled(minecraft, SAVING_LEVEL_SCREEN, CheckpointUtil::onDisconnect, true);
 
             try {
                 // Clear the current world directory
                 FileSystemUtil.deleteDirectory(worldDir, false);
 
                 // Copy files from the checkpoint directory
-                System.out.println(checkpointDir.toPath() + " - " + worldDir.toPath());
                 FileSystemUtil.copyDirectory(checkpointDir.toPath(), worldDir.toPath(), true);
 
                 unlockWorld();
+
                 // Rejoin the world on the main thread
-                minecraft.execute(() -> minecraft.createWorldOpenFlows().loadLevel(new GenericDirtMessageScreen(Component.translatable("menu.savingLevel")), worldName));
+                minecraft.execute(() -> minecraft.createWorldOpenFlows().loadLevel(SAVING_LEVEL_SCREEN, worldName));
             } catch (IOException e) {
                 e.printStackTrace();
                 minecraft.execute(() -> minecraft.setScreen(new ErrorScreen(Component.translatable("menu.savemod.error"), Component.translatable("menu.savemod.error.text"))));

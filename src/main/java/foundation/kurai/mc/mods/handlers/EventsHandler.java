@@ -1,9 +1,10 @@
-package foundation.kurai.handlers;
+package foundation.kurai.mc.mods.handlers;
 
-import foundation.kurai.CheckpointModel;
-import foundation.kurai.screens.CheckpointsScreen;
-import foundation.kurai.util.CheckpointUtil;
-import foundation.kurai.widgets.IconButton;
+import foundation.kurai.mc.mods.CheckpointModel;
+import foundation.kurai.mc.mods.CheckpointsMod;
+import foundation.kurai.mc.mods.screens.CheckpointsScreen;
+import foundation.kurai.mc.mods.util.CheckpointUtil;
+import foundation.kurai.mc.mods.widgets.IconButton;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.components.Button;
 import net.minecraft.client.gui.screens.PauseScreen;
@@ -17,10 +18,10 @@ import net.minecraftforge.fml.common.Mod;
 
 import java.util.List;
 
-@Mod.EventBusSubscriber(modid = "checkpoints_mod", bus = Mod.EventBusSubscriber.Bus.FORGE)
+@Mod.EventBusSubscriber(modid = CheckpointsMod.MODID, bus = Mod.EventBusSubscriber.Bus.FORGE)
 public class EventsHandler {
 
-    private static final ResourceLocation ICON = new ResourceLocation("checkpoints_mod", "textures/gui/checkpoints_list.png");
+    private static final ResourceLocation ICON = new ResourceLocation(CheckpointsMod.MODID, "textures/gui/checkpoints_list.png");
 
     private static final CheckpointsScreen checkpointsScreen = new CheckpointsScreen();
 

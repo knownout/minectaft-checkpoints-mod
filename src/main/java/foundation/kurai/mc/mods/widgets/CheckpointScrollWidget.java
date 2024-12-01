@@ -1,14 +1,12 @@
-package foundation.kurai.widgets;
-import foundation.kurai.CheckpointModel;
-import foundation.kurai.renderers.CheckpointEntityRenderer;
+package foundation.kurai.mc.mods.widgets;
+import foundation.kurai.mc.mods.CheckpointModel;
+import foundation.kurai.mc.mods.renderers.CheckpointEntityRenderer;
 import net.minecraft.Util;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.components.AbstractSelectionList;
 import net.minecraft.client.gui.narration.NarrationElementOutput;
 import org.jetbrains.annotations.NotNull;
-
-import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Consumer;
@@ -51,16 +49,7 @@ public class CheckpointScrollWidget extends AbstractSelectionList<CheckpointScro
         this.checkpoints.clear();
 
         List<CheckpointModel> checkpointModels = CheckpointModel.getCheckpoints();
-        checkpointModels.forEach(checkpointModel -> this.checkpoints.add(new CheckpointEntry(
-                checkpointModel.fileName,
-                checkpointModel.name,
-                checkpointModel.createdAt,
-                checkpointModel.biomeName,
-                checkpointModel.screenshotPath.toFile(),
-                this
-        )));
-
-//        this.checkpoints.sort(Comparator.comparing((CheckpointScrollWidget.CheckpointEntry entry) -> MetadataUtil.parseDate(entry.renderer.createdAt)).reversed());
+        checkpointModels.forEach(checkpointModel -> this.checkpoints.add(new CheckpointEntry(checkpointModel, this)));
 
         return this.checkpoints;
     }
@@ -81,19 +70,14 @@ public class CheckpointScrollWidget extends AbstractSelectionList<CheckpointScro
 
     public static class CheckpointEntry extends AbstractSelectionList.Entry<CheckpointEntry> {
         public final CheckpointScrollWidget parentWidget;
-        public final String fileName;
-        public final String biomeName;
-
         public final CheckpointEntityRenderer renderer;
 
         private long lastClickTime;
 
-        public CheckpointEntry(String fileName, String name, String createdAt, String biomeName, File screenshotFile, CheckpointScrollWidget parentWidget) {
-            this.renderer = new CheckpointEntityRenderer(screenshotFile, name, createdAt, fileName);
+        public CheckpointEntry(CheckpointModel model, CheckpointScrollWidget parentWidget) {
+            this.renderer = new CheckpointEntityRenderer(model);
 
             this.parentWidget = parentWidget;
-            this.fileName = fileName;
-            this.biomeName = biomeName;
         }
 
         @Override

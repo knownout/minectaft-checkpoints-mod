@@ -1,4 +1,4 @@
-package foundation.kurai.util;
+package foundation.kurai.mc.mods.util;
 
 import com.mojang.blaze3d.platform.NativeImage;
 import com.mojang.blaze3d.systems.RenderSystem;

@@ -1,12 +1,12 @@
-package foundation.kurai;
-import foundation.kurai.handlers.EventsHandler;
+package foundation.kurai.mc.mods;
+import foundation.kurai.mc.mods.handlers.EventsHandler;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.common.Mod;
 
 @Mod(CheckpointsMod.MODID)
 public class CheckpointsMod
 {
-    public static final String MODID = "checkpoints_mod";
+    public static final String MODID = "checkpoints";
 
     public CheckpointsMod()
     {

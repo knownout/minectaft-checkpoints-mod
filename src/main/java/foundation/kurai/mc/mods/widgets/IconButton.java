@@ -1,4 +1,4 @@
-package foundation.kurai.widgets;
+package foundation.kurai.mc.mods.widgets;
 
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.components.Button;

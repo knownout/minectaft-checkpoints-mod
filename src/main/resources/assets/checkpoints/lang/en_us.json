@@ -1,0 +1,11 @@
+{
+  "screen.checkpoints.checkpoints_list": "Checkpoints list",
+  "screen.checkpoints.load_button": "Load",
+  "screen.checkpoints.search_placeholder": "Search for checkpoints...",
+  "screen.checkpoints.create_button": "Create new",
+  "screen.checkpoints.back_button": "Back",
+  "screen.checkpoints.delete_button": "Delete",
+  "screen.checkpoints.version_label": "Version",
+  "menu.checkpoints.error.text": "Failed to load checkpoint, possible world corruption",
+  "menu.checkpoints.error": "Fatal exception"
+}

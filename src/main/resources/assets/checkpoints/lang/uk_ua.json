@@ -1,0 +1,11 @@
+{
+  "screen.checkpoints.checkpoints_list": "Список чекпоінтів",
+  "screen.checkpoints.load_button": "Завантажити",
+  "screen.checkpoints.search_placeholder": "Шукати чекпоінти...",
+  "screen.checkpoints.create_button": "Створити новий",
+  "screen.checkpoints.back_button": "Назад",
+  "screen.checkpoints.delete_button": "Видалити",
+  "screen.checkpoints.version_label": "Версія",
+  "menu.checkpoints.error.text": "Помилка завантаження чекпоінта, можливе пошкодження світу",
+  "menu.checkpoints.error": "Фатальна помилка"
+}
