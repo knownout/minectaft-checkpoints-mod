@@ -13,6 +13,8 @@ import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.level.storage.LevelResource;
 
 import java.io.*;
+import java.nio.channels.FileChannel;
+import java.nio.channels.FileLock;
 import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.concurrent.CompletableFuture;
@@ -46,6 +48,8 @@ public class CheckpointUtil {
         }
 
         File worldPath = MetadataUtil.getWorldPath().toFile();
+        lockWorld(worldPath);
+
         File checkpointDir = new File(worldPath, "checkpoints/" + fileName);
         File screenshotFile = new File(checkpointDir, "screenshot.png");
 
@@ -72,7 +76,8 @@ public class CheckpointUtil {
                 // Save JSON metadata
                 saveMetadata(metadataFile, checkpointName);
 
-                WorldBackupUtil.backupWorld(new File(checkpointDir, "world/").toPath(), System.out::println);
+                WorldBackupUtil.backupWorld(new File(checkpointDir, "world").toPath(), System.out::println);
+                unlockWorld();
 
                 if (callback != null) callback.accept("Checkpoint created successfully: " + checkpointDir.getAbsolutePath());
             } catch (Exception e) {
@@ -144,6 +149,8 @@ public class CheckpointUtil {
         // Get the current world and checkpoint paths
         String worldName = MetadataUtil.getWorldName();
         File worldDirectory = MetadataUtil.getWorldPath().toFile();
+        lockWorld(worldDirectory);
+
         File checkpointDir = new File(worldDirectory, "checkpoints/" + checkpointFileName + "/world");
 
         if (!checkpointDir.exists() || !checkpointDir.isDirectory()) {
@@ -165,6 +172,7 @@ public class CheckpointUtil {
                 System.out.println(checkpointDir.toPath() + " - " + worldDir.toPath());
                 FileSystemUtil.copyDirectory(checkpointDir.toPath(), worldDir.toPath(), true);
 
+                unlockWorld();
                 // Rejoin the world on the main thread
                 minecraft.execute(() -> minecraft.createWorldOpenFlows().loadLevel(new GenericDirtMessageScreen(Component.translatable("menu.savingLevel")), worldName));
             } catch (IOException e) {
@@ -172,5 +180,42 @@ public class CheckpointUtil {
                 minecraft.execute(() -> minecraft.setScreen(new ErrorScreen(Component.translatable("menu.savemod.error"), Component.translatable("menu.savemod.error.text"))));
             }
         });
+    }
+
+    private static FileLock lock;
+    private static FileChannel channel;
+
+    public static void lockWorld(File worldDirectory) {
+        try {
+            // Create a lock file in the world directory
+            File lockFile = new File(worldDirectory, "world.lock");
+            if (!lockFile.exists()) {
+                lockFile.createNewFile();
+            }
+
+            // Acquire a lock on the file
+            channel = new FileOutputStream(lockFile).getChannel();
+            lock = channel.tryLock();
+
+            if (lock != null) {
+                System.out.println("World successfully locked.");
+            } else {
+                System.out.println("Failed to lock the world.");
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public static void unlockWorld() {
+        try {
+            if (lock != null) {
+                lock.release();
+                channel.close();
+                System.out.println("World successfully unlocked.");
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 }

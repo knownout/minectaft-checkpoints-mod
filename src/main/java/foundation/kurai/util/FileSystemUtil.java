@@ -14,7 +14,7 @@ public class FileSystemUtil {
             @Override
             public @NotNull FileVisitResult preVisitDirectory(Path dir, @NotNull BasicFileAttributes attrs) throws IOException {
                 // Skip any directory whose path includes "/checkpoints"
-                if (dir.toAbsolutePath().toString().contains("/checkpoints") && !restore) {
+                if (dir.toAbsolutePath().toString().contains("checkpoints") && !restore) {
                     return FileVisitResult.SKIP_SUBTREE; // Skip this directory and its contents
                 }
 
@@ -30,7 +30,7 @@ public class FileSystemUtil {
             @Override
             public @NotNull FileVisitResult visitFile(Path file, @NotNull BasicFileAttributes attrs) throws IOException {
                 // Skip files in "/checkpoints" directory
-                if (file.toAbsolutePath().toString().contains("/checkpoints") && !restore) {
+                if (file.toAbsolutePath().toString().contains("checkpoints") && !restore) {
                     return FileVisitResult.CONTINUE; // Skip this file
                 }
 
@@ -46,14 +46,14 @@ public class FileSystemUtil {
         if (directory.isDirectory()) {
             for (File file : Objects.requireNonNull(directory.listFiles())) {
                 // Skip any directory or file inside a "checkpoints" folder
-                if (file.toPath().toAbsolutePath().toString().contains("/checkpoints") && !force) {
+                if (file.toPath().toAbsolutePath().toString().contains("checkpoints") && !force) {
                     continue; // Skip this file or directory
                 }
                 deleteDirectory(file, force); // Recursively delete other files and directories
             }
         }
         // Skip deleting the "checkpoints" folder itself
-        if (!directory.toPath().toAbsolutePath().toString().contains("/checkpoints") || force) {
+        if (!directory.toPath().toAbsolutePath().toString().contains("checkpoints") || force) {
             directory.delete();
         }
     }

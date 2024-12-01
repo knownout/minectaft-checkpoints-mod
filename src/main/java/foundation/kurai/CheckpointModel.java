@@ -29,8 +29,8 @@ public class CheckpointModel {
         this.modVersion = modVersion;
         this.biomeName = biomeName;
 
-        this.screenshotPath = new File(MetadataUtil.getWorldPath().toFile(), "/checkpoints/" + fileName + "/screenshot.png").toPath();
-        this.metadataPath = new File(MetadataUtil.getWorldPath().toFile(), "/checkpoints/" + fileName + "/checkpoint.json").toPath();
+        this.screenshotPath = new File(MetadataUtil.getWorldPath().toFile(), Path.of("checkpoints", fileName, "screenshot.png").toString()).toPath();
+        this.metadataPath = new File(MetadataUtil.getWorldPath().toFile(), Path.of("checkpoints", fileName, "checkpoint.png").toString()).toPath();
     }
 
     public static List<CheckpointModel> getCheckpoints() {
