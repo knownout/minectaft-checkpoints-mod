@@ -14,8 +14,8 @@ import java.io.File;
 import java.io.IOException;
 
 public class CheckpointEntityRenderer {
-    private static final ResourceLocation ARROW_ICON_LIT = new ResourceLocation(CheckpointsMod.MODID, "textures/gui/load_highlighted.png"); // Use Minecraft's built-in arrow texture
-    private static final ResourceLocation ARROW_ICON = new ResourceLocation(CheckpointsMod.MODID, "textures/gui/load.png"); // Use Minecraft's built-in arrow texture
+    private static final ResourceLocation ARROW_ICON_LIT = ResourceLocation.fromNamespaceAndPath(CheckpointsMod.MODID, "textures/gui/load_highlighted.png"); // Use Minecraft's built-in arrow texture
+    private static final ResourceLocation ARROW_ICON = ResourceLocation.fromNamespaceAndPath(CheckpointsMod.MODID, "textures/gui/load.png"); // Use Minecraft's built-in arrow texture
 
     private int screenshotWidth = 0;
     private int screenshotHeight = 0;

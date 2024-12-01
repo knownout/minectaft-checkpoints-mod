@@ -57,7 +57,6 @@ public class CheckpointsScreen extends Screen {
                 this.width, // Width of the scroll widget
                 this.height - 80, // Height of the scroll widget
                 40, // Top margin
-                this.height - 40, // Bottom margin
                 44 // Height of each entry
         );
         checkpointList.setCheckpoints(this.checkpointList.getCheckpoints()); // Populate with data
@@ -126,8 +125,6 @@ public class CheckpointsScreen extends Screen {
     public void render(@NotNull GuiGraphics graphics, int mouseX, int mouseY, float partialTicks) {
         this.searchField.render(graphics, mouseX, mouseY, partialTicks);
 
-//        this.renderBackground(graphics);
-
         this.checkpointList.render(graphics, mouseX, mouseY, partialTicks);
 
         renderPanelBackground(graphics, 0, 0.5F);
@@ -136,17 +133,9 @@ public class CheckpointsScreen extends Screen {
         super.render(graphics, mouseX, mouseY, partialTicks);
     }
 
-    public void renderBackground(GuiGraphics graphics) {
-        graphics.setColor(0.25F, 0.25F, 0.25F, 1.0F);
-        graphics.blit(Screen.BACKGROUND_LOCATION, 0, 0, 0, 0, this.width, this.height, 32, 32);
-        graphics.setColor(1.0F, 1.0F, 1.0F, 1.0F);
-
-//        graphics.fillGradient(0, 0, this.width, this.height, -1072689136, -804253680);
-    }
-
     private void renderPanelBackground(GuiGraphics graphics, int y, float exp) {
         graphics.setColor(exp, exp, exp, 1.0F);
-        graphics.blit(Screen.BACKGROUND_LOCATION, 0, y, 0, 0, this.width, 40, 32, 32);
+        graphics.blit(Screen.MENU_BACKGROUND, 0, y, 0, 0, this.width, 40, 32, 32);
         graphics.setColor(1.0F, 1.0F, 1.0F, 1.0F);
     }
 

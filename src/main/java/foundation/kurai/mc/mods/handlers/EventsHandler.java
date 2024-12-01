@@ -21,7 +21,7 @@ import java.util.List;
 @Mod.EventBusSubscriber(modid = CheckpointsMod.MODID, bus = Mod.EventBusSubscriber.Bus.FORGE)
 public class EventsHandler {
 
-    private static final ResourceLocation ICON = new ResourceLocation(CheckpointsMod.MODID, "textures/gui/checkpoints_list.png");
+    private static final ResourceLocation ICON = ResourceLocation.fromNamespaceAndPath(CheckpointsMod.MODID, "textures/gui/checkpoints_list.png");
 
     private static final CheckpointsScreen checkpointsScreen = new CheckpointsScreen();
 
@@ -40,12 +40,12 @@ public class EventsHandler {
 
                     IconButton iconButton = new IconButton(
                             button.getX() + button.getWidth() + 4, // X position
-                            button.getY(), // Y position
-                            20, // Width
-                            20, // Height
-                            ICON, // Icon texture
-                            12, // Icon width
-                            12, // Icon height
+                            button.getY(),
+                            20,
+                            20,
+                            ICON,
+                            12,
+                            12,
                             btn -> net.minecraft.client.Minecraft.getInstance().setScreen(checkpointsScreen) // OnPress
                     );
 
@@ -66,7 +66,7 @@ public class EventsHandler {
 
             if (checkpoints.isEmpty()) return;
 
-            CheckpointModel latestCheckpoint = checkpoints.get(0);
+            CheckpointModel latestCheckpoint = checkpoints.getFirst();
 
             if (latestCheckpoint != null) {
                 // Load the latest checkpoint

@@ -20,8 +20,8 @@ public class CheckpointScrollWidget extends AbstractSelectionList<CheckpointScro
 
     public final List<CheckpointScrollWidget.CheckpointEntry> checkpoints = new ArrayList<>();
 
-    public CheckpointScrollWidget(Minecraft minecraft, int width, int height, int top, int bottom, int itemHeight) {
-        super(minecraft, width, height, top, bottom, itemHeight);
+    public CheckpointScrollWidget(Minecraft minecraft, int width, int height, int top, int itemHeight) {
+        super(minecraft, width, height, top, itemHeight);
     }
 
     public void setSelectionCallback(Consumer<CheckpointEntry> callback) {
@@ -33,7 +33,7 @@ public class CheckpointScrollWidget extends AbstractSelectionList<CheckpointScro
     }
 
     public int getRowLeft() {
-        return this.x0 + this.width / 2 - this.getRowWidth() / 2 + 2;
+        return this.getX() + this.width / 2 - this.getRowWidth() / 2 + 2;
     }
 
     public void setCheckpoints(List<CheckpointEntry> checkpoints) {
@@ -65,8 +65,7 @@ public class CheckpointScrollWidget extends AbstractSelectionList<CheckpointScro
     }
 
     @Override
-    public void updateNarration(@NotNull NarrationElementOutput p_169152_) {
-    }
+    protected void updateWidgetNarration(@NotNull NarrationElementOutput p_259858_) {}
 
     public static class CheckpointEntry extends AbstractSelectionList.Entry<CheckpointEntry> {
         public final CheckpointScrollWidget parentWidget;

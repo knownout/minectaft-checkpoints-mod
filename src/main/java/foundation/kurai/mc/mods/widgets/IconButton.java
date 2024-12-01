@@ -22,8 +22,8 @@ public class IconButton extends Button {
     }
 
     @Override
-    public void render(@NotNull GuiGraphics graphics, int mouseX, int mouseY, float partialTick) {
-        super.render(graphics, mouseX, mouseY, partialTick);
+    public void renderWidget(@NotNull GuiGraphics graphics, int mouseX, int mouseY, float partialTick) {
+        super.renderWidget(graphics, mouseX, mouseY, partialTick);
 
         // Calculate the center position to draw the icon
         int iconX = this.getX() + (this.width - iconWidth) / 2;

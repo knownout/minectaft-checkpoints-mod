@@ -3,7 +3,7 @@ package foundation.kurai.mc.mods.util;
 import com.google.gson.JsonObject;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.screens.ErrorScreen;
-import net.minecraft.client.gui.screens.GenericDirtMessageScreen;
+import net.minecraft.client.gui.screens.GenericMessageScreen;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.client.gui.screens.TitleScreen;
 import net.minecraft.network.chat.Component;
@@ -19,7 +19,7 @@ import java.time.format.DateTimeFormatter;
 import java.util.concurrent.CompletableFuture;
 
 public class CheckpointUtil {
-    public static final Screen SAVING_LEVEL_SCREEN = new GenericDirtMessageScreen(Component.translatable("menu.savingLevel"));
+    public static final Screen SAVING_LEVEL_SCREEN = new GenericMessageScreen(Component.translatable("menu.savingLevel"));
 
     public static void saveCurrentWorld() {
         Minecraft minecraft = Minecraft.getInstance();
@@ -122,7 +122,7 @@ public class CheckpointUtil {
 
         assert minecraft.level != null;
         minecraft.level.disconnect();
-        minecraft.clearLevel(SAVING_LEVEL_SCREEN);
+        minecraft.disconnect(SAVING_LEVEL_SCREEN);
 
         TitleScreen titlescreen = new TitleScreen();
         minecraft.setScreen(titlescreen);
@@ -164,7 +164,7 @@ public class CheckpointUtil {
                 unlockWorld();
 
                 // Rejoin the world on the main thread
-                minecraft.execute(() -> minecraft.createWorldOpenFlows().loadLevel(SAVING_LEVEL_SCREEN, worldName));
+                minecraft.execute(() -> minecraft.createWorldOpenFlows().openWorld(worldName, () -> minecraft.setScreen(SAVING_LEVEL_SCREEN)));
             } catch (IOException e) {
                 e.printStackTrace();
                 minecraft.execute(() -> minecraft.setScreen(new ErrorScreen(Component.translatable("menu.savemod.error"), Component.translatable("menu.savemod.error.text"))));
