@@ -1,0 +1,11 @@
+{
+  "screen.checkpoints_mod.checkpoints_list": "Список чекпоинтов",
+  "screen.checkpoints_mod.load_button": "Загрузить",
+  "screen.checkpoints_mod.search_placeholder": "Искать чекпоинты...",
+  "screen.checkpoints_mod.create_button": "Создать новый",
+  "screen.checkpoints_mod.back_button": "Назад",
+  "screen.checkpoints_mod.delete_button": "Удалить",
+  "screen.checkpoints_mod.version_label": "Версия",
+  "menu.checkpoints_mod.error.text": "Ошибка загрузки чекпоинта, возможно повреждение мира",
+  "menu.checkpoints_mod.error": "Фатальная ошибка"
+}
